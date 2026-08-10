@@ -1,196 +1,473 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Solicitação de Agendamento - Teleconsulta / Atenção Especializada</title>
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        /* === ESTILOS GERAIS (inspirados no modelo) === */
+        /* ===== RESET E BASE ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', Roboto, system-ui, sans-serif;
         }
 
         body {
-            background-color: #f0f4f8;
+            background: linear-gradient(145deg, #f6f9fc 0%, #e9f0f5 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            padding: 20px;
         }
 
-        /* === CABEÇALHO (COR IGUAL AO MODELO) === */
-        .header {
-            background-color: #005a9c; /* Azul forte, igual ao modelo */
-            color: white;
+        .container {
+            max-width: 1280px;
             width: 100%;
-            max-width: 1200px;
-            padding: 25px 30px;
-            border-radius: 12px 12px 0 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            text-align: center;
+        }
+
+        /* ===== CABEÇALHO (com gradiente e efeito glass) ===== */
+        .header {
+            background: linear-gradient(135deg, #0b3b5c 0%, #1a5f7a 40%, #2a7f9c 100%);
+            color: white;
+            padding: 32px 40px;
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 10px 30px rgba(10, 55, 94, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -40%;
+            left: 10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .header-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .header-left .badge {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            align-self: flex-start;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .header h1 {
-            font-size: 2rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
+            font-size: 2.1rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
         }
 
-        .header .diretoria {
-            font-size: 1.2rem;
-            opacity: 0.9;
+        .header h1 i {
+            color: #7fc9ff;
+            margin-right: 12px;
         }
 
-        .header .diretora {
+        .header .subtitle {
             font-size: 1rem;
-            opacity: 0.8;
+            opacity: 0.85;
+            font-weight: 400;
             margin-top: 4px;
         }
 
-        .header .creditos {
-            font-size: 0.85rem;
+        .header .diretoria {
+            font-size: 1rem;
+            font-weight: 500;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 6px 18px;
+            border-radius: 30px;
+            display: inline-block;
+            backdrop-filter: blur(4px);
+        }
+
+        .header-right {
+            text-align: right;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 12px 24px;
+            border-radius: 16px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .header-right .diretora {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .header-right .creditos {
+            font-size: 0.8rem;
             opacity: 0.7;
-            margin-top: 8px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            padding-top: 8px;
+            margin-top: 4px;
+            font-weight: 300;
         }
 
-        /* === TÍTULO DA PÁGINA === */
-        .page-title {
-            width: 100%;
-            max-width: 1200px;
-            background-color: #e8f0fe;
-            padding: 15px 30px;
-            text-align: center;
-            font-size: 1.4rem;
+        /* ===== BARRA DE TÍTULO DA PÁGINA ===== */
+        .page-title-bar {
+            background: white;
+            padding: 18px 32px;
+            border-left: 6px solid #1a5f7a;
+            border-right: 6px solid #1a5f7a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .page-title-bar .title-main {
+            font-size: 1.3rem;
             font-weight: 600;
-            color: #003366;
-            border-left: 6px solid #005a9c;
-            border-right: 6px solid #005a9c;
-            margin-top: 0;
+            color: #0b3b5c;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        /* === GRADE DE CARDS === */
+        .page-title-bar .title-main i {
+            color: #1a5f7a;
+            background: #e8f0fe;
+            padding: 8px;
+            border-radius: 10px;
+        }
+
+        .page-title-bar .title-tag {
+            background: #e8f0fe;
+            color: #1a5f7a;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== GRADE DE CARDS (com muito estilo) ===== */
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            width: 100%;
-            max-width: 1200px;
-            padding: 30px 20px;
-            background-color: white;
-            border-radius: 0 0 12px 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 28px;
+            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 0 0 24px 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             margin-bottom: 30px;
         }
 
         .card {
             background: white;
-            border-radius: 12px;
-            padding: 20px 18px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            border: 1px solid #e2e8f0;
-            transition: transform 0.2s, box-shadow 0.2s;
+            border-radius: 20px;
+            padding: 28px 22px 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #1a5f7a, #4a9fc7, #1a5f7a);
+            background-size: 200% 100%;
+            transition: all 0.5s;
+            opacity: 0;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 90, 156, 0.15);
-            border-color: #005a9c;
+            transform: translateY(-8px);
+            box-shadow: 0 16px 40px rgba(26, 95, 122, 0.15);
+            border-color: rgba(26, 95, 122, 0.2);
         }
 
-        .card-icon {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            color: #005a9c;
+        .card-icon-wrapper {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #e8f4fc, #d4e9f7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #1a5f7a;
+            margin-bottom: 16px;
+            transition: all 0.3s;
+        }
+
+        .card:hover .card-icon-wrapper {
+            background: linear-gradient(135deg, #1a5f7a, #2a7f9c);
+            color: white;
+            transform: scale(1.05);
         }
 
         .card-title {
             font-weight: 600;
-            font-size: 1.1rem;
-            color: #1e293b;
-            margin-bottom: 12px;
+            font-size: 1.05rem;
+            color: #0b2a3d;
+            margin-bottom: 8px;
             line-height: 1.3;
-            min-height: 50px;
+            min-height: 48px;
             display: flex;
             align-items: center;
+            justify-content: center;
+        }
+
+        .card-desc {
+            font-size: 0.8rem;
+            color: #7a8a9a;
+            margin-bottom: 18px;
+            line-height: 1.4;
+            min-height: 36px;
         }
 
         .card-btn {
-            background-color: #005a9c;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
+            background: white;
+            color: #1a5f7a;
+            border: 2px solid #d4e9f7;
+            padding: 10px 28px;
+            border-radius: 40px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
-            transition: background-color 0.2s;
-            width: 100%;
-            max-width: 200px;
+            transition: all 0.3s;
             text-decoration: none;
-            display: inline-block;
-            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .card-btn i {
+            font-size: 0.8rem;
+            transition: transform 0.3s;
         }
 
         .card-btn:hover {
-            background-color: #003d73;
+            background: #1a5f7a;
+            color: white;
+            border-color: #1a5f7a;
+            box-shadow: 0 8px 20px rgba(26, 95, 122, 0.25);
         }
 
-        /* === RODAPÉ === */
+        .card-btn:hover i {
+            transform: translateX(4px);
+        }
+
+        /* Variação de cores nos cards (detalhe) */
+        .card:nth-child(3n+1) .card-icon-wrapper {
+            background: linear-gradient(135deg, #fef3e8, #fde8d0);
+            color: #c0763a;
+        }
+        .card:nth-child(3n+1):hover .card-icon-wrapper {
+            background: linear-gradient(135deg, #c0763a, #e0944a);
+            color: white;
+        }
+
+        .card:nth-child(3n+2) .card-icon-wrapper {
+            background: linear-gradient(135deg, #e8f4e8, #d0e8d0);
+            color: #3a7a5a;
+        }
+        .card:nth-child(3n+2):hover .card-icon-wrapper {
+            background: linear-gradient(135deg, #3a7a5a, #4a9a6a);
+            color: white;
+        }
+
+        .card:nth-child(3n+3) .card-icon-wrapper {
+            background: linear-gradient(135deg, #f0e8fc, #e0d4f7);
+            color: #6a3a9c;
+        }
+        .card:nth-child(3n+3):hover .card-icon-wrapper {
+            background: linear-gradient(135deg, #6a3a9c, #8a5abc);
+            color: white;
+        }
+
+        /* ===== RODAPÉ ===== */
         .footer {
-            width: 100%;
-            max-width: 1200px;
+            background: white;
+            padding: 28px 32px;
+            border-radius: 16px;
             text-align: center;
-            padding: 20px;
-            color: #64748b;
-            font-size: 0.9rem;
-            border-top: 1px solid #dce1e8;
-            margin-top: 10px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.02);
+            margin-top: 8px;
         }
 
-        .footer strong {
-            color: #005a9c;
+        .footer .footer-brand {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0b3b5c;
+            letter-spacing: -0.3px;
         }
 
-        /* Ajustes para telas pequenas */
-        @media (max-width: 600px) {
+        .footer .footer-brand i {
+            color: #1a5f7a;
+            margin-right: 8px;
+        }
+
+        .footer .footer-divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #1a5f7a, transparent);
+            margin: 10px auto;
+            border-radius: 4px;
+        }
+
+        .footer p {
+            color: #7a8a9a;
+            font-size: 0.85rem;
+        }
+
+        /* ===== RESPONSIVIDADE ===== */
+        @media (max-width: 768px) {
+            .header {
+                padding: 24px 20px;
+                border-radius: 20px 20px 0 0;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .header-right {
+                text-align: left;
+                width: 100%;
+                padding: 12px 16px;
+            }
+
             .header h1 {
                 font-size: 1.5rem;
             }
-            .page-title {
+
+            .page-title-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 14px 20px;
+            }
+
+            .page-title-bar .title-main {
                 font-size: 1.1rem;
+            }
+
+            .card-grid {
+                padding: 24px 16px;
+                gap: 20px;
+            }
+
+            .card {
+                padding: 22px 18px;
+            }
+
+            .footer {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
                 padding: 12px;
             }
+
+            .header h1 {
+                font-size: 1.2rem;
+            }
+
             .card-grid {
-                padding: 20px 12px;
-                gap: 18px;
+                grid-template-columns: 1fr;
+                padding: 16px 12px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== CABEÇALHO (mesma cor do modelo) ===== -->
+<div class="container">
+
+    <!-- ===== CABEÇALHO ===== -->
     <header class="header">
-        <h1>📋 Solicitação de Agendamento</h1>
-        <div class="diretoria">Diretoria de Regulação do Acesso</div>
-        <div class="diretora">Diretora: Paloma Morais</div>
-        <div class="creditos">Página criada por: Ana Paula Araújo da Silva — Matric. 201704</div>
+        <div class="header-content">
+            <div class="header-left">
+                <span class="badge"><i class="fas fa-phone-alt"></i> Atenção Especializada</span>
+                <h1><i class="fas fa-calendar-check"></i>Solicitação de Agendamento</h1>
+                <span class="subtitle">Teleconsulta · Regulação de Acesso</span>
+                <span class="diretoria"><i class="fas fa-building"></i> Diretoria de Regulação do Acesso</span>
+            </div>
+            <div class="header-right">
+                <div class="diretora"><i class="fas fa-user-circle"></i> Diretora: Paloma Morais</div>
+                <div class="creditos"><i class="fas fa-code"></i> Ana Paula Araújo da Silva — Matric. 201704</div>
+            </div>
+        </div>
     </header>
 
-    <!-- ===== TÍTULO DA PÁGINA ===== -->
-    <div class="page-title">
-        📌 Teleconsulta / Atenção Especializada — Acessos Rápidos
+    <!-- ===== BARRA DE TÍTULO ===== -->
+    <div class="page-title-bar">
+        <div class="title-main">
+            <i class="fas fa-th-large"></i>
+            Ferramentas de Acesso Rápido
+        </div>
+        <span class="title-tag"><i class="fas fa-link"></i> 9 links disponíveis</span>
     </div>
 
     <!-- ===== GRADE DE CARDS ===== -->
@@ -198,74 +475,106 @@
 
         <!-- Card 1 -->
         <div class="card">
-            <div class="card-icon">📞</div>
+            <div class="card-icon-wrapper"><i class="fas fa-phone-volume"></i></div>
             <div class="card-title">Fila para Ligações</div>
-            <a href="https://docs.google.com/spreadsheets/d/1NrLJ7ulMx93VXse-k8C4PX7FkGPLEZ0yTQSIVQeNItg/edit?gid=175443153#gid=175443153" target="_blank" class="card-btn">Acessar</a>
+            <div class="card-desc">Lista de espera para contato telefônico</div>
+            <a href="https://docs.google.com/spreadsheets/d/1NrLJ7ulMx93VXse-k8C4PX7FkGPLEZ0yTQSIVQeNItg/edit?gid=175443153#gid=175443153" target="_blank" class="card-btn">
+                Acessar <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Card 2 -->
         <div class="card">
-            <div class="card-icon">📝</div>
+            <div class="card-icon-wrapper"><i class="fas fa-pen-fancy"></i></div>
             <div class="card-title">Solicitação para Agendamentos</div>
-            <a href="https://docs.google.com/spreadsheets/d/1-I6ZwiP6xXu3qMp5uqr1B9dH6cpyYkO8Ge5UA6dcIxQ/edit?gid=509279936#gid=509279936" target="_blank" class="card-btn">Acessar</a>
+            <div class="card-desc">Formulário para novos agendamentos</div>
+            <a href="https://docs.google.com/spreadsheets/d/1-I6ZwiP6xXu3qMp5uqr1B9dH6cpyYkO8Ge5UA6dcIxQ/edit?gid=509279936#gid=509279936" target="_blank" class="card-btn">
+                Acessar <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Card 3 -->
         <div class="card">
-            <div class="card-icon">🔄</div>
-            <div class="card-title">Fila - Requalificação<br>Retorno de Neurologia</div>
-            <a href="https://docs.google.com/spreadsheets/d/1ZwzPVQAifNLfJJO1lFr1BvQd6e6G3yC5C2H4Ry2N43k/edit?gid=621702727#gid=621702727" target="_blank" class="card-btn">Acessar</a>
+            <div class="card-icon-wrapper"><i class="fas fa-brain"></i></div>
+            <div class="card-title">Requalificação Neurologia</div>
+            <div class="card-desc">Fila para retorno em neurologia</div>
+            <a href="https://docs.google.com/spreadsheets/d/1ZwzPVQAifNLfJJO1lFr1BvQd6e6G3yC5C2H4Ry2N43k/edit?gid=621702727#gid=621702727" target="_blank" class="card-btn">
+                Acessar <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Card 4 -->
         <div class="card">
-            <div class="card-icon">📊</div>
-            <div class="card-title">Controle de Agendamentos<br>Diretoria de Regulação</div>
-            <a href="https://docs.google.com/spreadsheets/d/11X7DQcngdN51yFYodEWBmMCc8Pi-YFbgQ4IQ7Ca93IU/edit?gid=0#gid=0" target="_blank" class="card-btn">Acessar</a>
+            <div class="card-icon-wrapper"><i class="fas fa-clipboard-list"></i></div>
+            <div class="card-title">Controle de Agendamentos</div>
+            <div class="card-desc">Gestão da Diretoria de Regulação</div>
+            <a href="https://docs.google.com/spreadsheets/d/11X7DQcngdN51yFYodEWBmMCc8Pi-YFbgQ4IQ7Ca93IU/edit?gid=0#gid=0" target="_blank" class="card-btn">
+                Acessar <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Card 5 -->
         <div class="card">
-            <div class="card-icon">📈</div>
-            <div class="card-title">Consolidado -<br>Controle de Agendamentos</div>
-            <a href="https://docs.google.com/spreadsheets/d/11X7DQcngdN51yFYodEWBmMCc8Pi-YFbgQ4IQ7Ca93IU/edit?gid=1603937153#gid=1603937153" target="_blank" class="card-btn">Acessar</a>
+            <div class="card-icon-wrapper"><i class="fas fa-chart-pie"></i></div>
+            <div class="card-title">Consolidado de Agendamentos</div>
+            <div class="card-desc">Visão consolidada dos agendamentos</div>
+            <a href="https://docs.google.com/spreadsheets/d/11X7DQcngdN51yFYodEWBmMCc8Pi-YFbgQ4IQ7Ca93IU/edit?gid=1603937153#gid=1603937153" target="_blank" class="card-btn">
+                Acessar <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Card 6 -->
         <div class="card">
-            <div class="card-icon">🏥</div>
+            <div class="card-icon-wrapper"><i class="fas fa-hospital"></i></div>
             <div class="card-title">Plataforma Feluma</div>
-            <a href="https://portal-feluma.sydle.com/home" target="_blank" class="card-btn">Acessar</a>
+            <div class="card-desc">Portal institucional Feluma</div>
+            <a href="https://portal-feluma.sydle.com/home" target="_blank" class="card-btn">
+                Acessar <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Card 7 -->
         <div class="card">
-            <div class="card-icon">🏢</div>
-            <div class="card-title">Contatos de todas as UBS's</div>
-            <a href="https://regulacaoconsolidados-dot.github.io/contatosdasubs/" target="_blank" class="card-btn">Acessar</a>
+            <div class="card-icon-wrapper"><i class="fas fa-phone-alt"></i></div>
+            <div class="card-title">Contatos UBS's</div>
+            <div class="card-desc">Diretório completo de todas as UBS</div>
+            <a href="https://regulacaoconsolidados-dot.github.io/contatosdasubs/" target="_blank" class="card-btn">
+                Acessar <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Card 8 -->
         <div class="card">
-            <div class="card-icon">📍</div>
-            <div class="card-title">Pesquisa por endereços</div>
-            <a href="https://app.powerbi.com/view?r=eyJrIjoiYTRiZDcyZWYtMzAwNS00NmYyLTk3N2EtYWEwYTk2NTFhMmY1IiwidCI6ImFlODYzMzdlLTU3NWUtNDMzMC05NDc2LTkzZGU2ODJiMDAyMCJ9" target="_blank" class="card-btn">Acessar</a>
+            <div class="card-icon-wrapper"><i class="fas fa-map-pin"></i></div>
+            <div class="card-title">Pesquisa por Endereços</div>
+            <div class="card-desc">Localize unidades por endereço</div>
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiYTRiZDcyZWYtMzAwNS00NmYyLTk3N2EtYWEwYTk2NTFhMmY1IiwidCI6ImFlODYzMzdlLTU3NWUtNDMzMC05NDc2LTkzZGU2ODJiMDAyMCJ9" target="_blank" class="card-btn">
+                Acessar <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Card 9 -->
         <div class="card">
-            <div class="card-icon">🆔</div>
+            <div class="card-icon-wrapper"><i class="fas fa-id-card"></i></div>
             <div class="card-title">Pesquisa por CNS</div>
-            <a href="https://cnesadm.datasus.gov.br/cnesadm/publico/usuarios/cadastro" target="_blank" class="card-btn">Acessar</a>
+            <div class="card-desc">Consulta ao Cartão Nacional de Saúde</div>
+            <a href="https://cnesadm.datasus.gov.br/cnesadm/publico/usuarios/cadastro" target="_blank" class="card-btn">
+                Acessar <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
     </section>
 
     <!-- ===== RODAPÉ ===== -->
     <footer class="footer">
-        <p><strong>Diretoria de Regulação do Acesso</strong><br>
-        Todos os direitos reservados</p>
+        <div class="footer-brand">
+            <i class="fas fa-heartbeat"></i> Diretoria de Regulação do Acesso
+        </div>
+        <div class="footer-divider"></div>
+        <p>Todos os direitos reservados &copy; 2026</p>
     </footer>
+
+</div>
 
 </body>
 </html>
